@@ -111,8 +111,12 @@ app.get("/healthz", (_req, res) => {
   res.json({ ok: true, service: "nexus-mcp-oss", now: new Date().toISOString() });
 });
 
+const publicDir = path.resolve(__dirname, "../public");
+
+const sendOpts = { root: publicDir, dotfiles: "allow" as const };
+
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/dashboard.html"));
+  res.sendFile("dashboard.html", sendOpts);
 });
 
 app.get("/dashboard", (_req, res) => {
@@ -120,11 +124,11 @@ app.get("/dashboard", (_req, res) => {
 });
 
 app.get("/pro-metrics", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/pro-metrics.html"));
+  res.sendFile("pro-metrics.html", sendOpts);
 });
 
 app.get("/connection-helper", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/connection-helper.html"));
+  res.sendFile("connection-helper.html", sendOpts);
 });
 
 app.get("/nexus", (_req, res) => {
@@ -348,7 +352,7 @@ app.get("/nexus/guide.md", (_req, res) => {
 });
 
 app.get("/agent-guide", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/agent-guide.html"));
+  res.sendFile("agent-guide.html", sendOpts);
 });
 
 app.post("/nexus/analyze", (req, res) => {
@@ -483,7 +487,7 @@ app.get("/nexus/wm/cache-entries", (_req, res) => {
 });
 
 app.get("/workspace-memory", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/workspace-memory.html"));
+  res.sendFile("workspace-memory.html", sendOpts);
 });
 
 // ─── Benchmark / paper-data export endpoints ────────────────────────────────
