@@ -1,26 +1,66 @@
 const presets = {
   "claude-code": {
-    title: "Claude Code Setup",
-    commands: `# 1. Add Nexus MCP to .claude/settings.json in your project
+    title: "Claude Code — Full Install & Connect Guide",
+    commands: `# ── Step 1: Install Claude Code CLI ─────────────────────────────
+npm install -g @anthropic-ai/claude-code
+
+# Verify
+claude --version
+
+# ── Step 2: Clone and start Nexus ────────────────────────────────
+git clone https://github.com/brian-Lab-0/nexus-mcp-oss.git
+cd nexus-mcp-oss
+npm install
+cp .env.example .env
+npm start
+# Nexus is now live at http://127.0.0.1:8787
+
+# Verify Nexus is running
+curl http://127.0.0.1:8787/healthz
+# → {"ok":true,"service":"nexus-mcp-oss","now":"..."}
+
+# ── Step 3: Connect Claude Code via MCP ──────────────────────────
+# Add to .claude/settings.json inside your project
+# (or ~/.claude/settings.json for global use)
 {
   "mcpServers": {
     "nexus": {
-      "command": "node_modules/.bin/tsx",
-      "args": ["src/mcp-bridge.ts"],
-      "env": { "NEXUS_URL": "http://127.0.0.1:8787" }
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/nexus-mcp-oss/dist/mcp-bridge.js"],
+      "env": {
+        "NEXUS_URL": "http://127.0.0.1:8787"
+      }
     }
   }
 }
 
-# 2. Keep the HTTP server running in a separate terminal
-npm run dev
+# ── Step 4: Copy the agent instruction file ───────────────────────
+# Drop .claude.md from this repo into your project root.
+# Claude Code reads it at session start — it teaches Claude
+# exactly when and how to call each Nexus tool.
+cp /path/to/nexus-mcp-oss/.claude.md /path/to/your-project/.claude.md
 
-# 3. Restart Claude Code — the nexus MCP will auto-connect
-# Then use these tools in your conversations:
-#   nexus_compress_prompt   — strip irrelevant prompt sections
-#   nexus_distill_session   — save cold-start snapshot at session end
-#   nexus_get_memory        — inject past session context
-#   nexus_analyze_step      — detect drift + get correction patch`
+# ── Step 5: Start Claude Code in your project ─────────────────────
+cd /path/to/your-project
+claude
+
+# Claude will automatically:
+#  - Register itself with Nexus
+#  - Compress long prompts (35–94% token savings)
+#  - Cache file reads (66%+ savings on repeated reads)
+#  - Analyze steps for drift and apply corrections
+#  - Distill the session at the end for warm restart
+#  - Record every interaction to data/sessions/<id>.jsonl
+
+# ── Monitor in real time ──────────────────────────────────────────
+# Dashboard:       http://127.0.0.1:8787/
+# Pro metrics:     http://127.0.0.1:8787/pro-metrics
+# Session data:    http://127.0.0.1:8787/nexus/recordings
+# Benchmark JSON:  http://127.0.0.1:8787/nexus/benchmark/summary
+
+# ── Optional: API-key auth for production ────────────────────────
+NEXUS_API_KEY=your-secret npm start
+# Add to MCP env: "NEXUS_API_KEY": "your-secret"`
   },
   codex: {
     title: "Codex Setup",
@@ -102,20 +142,32 @@ POST /nexus/analyze      — drift detection + FSM phase
   }
 };
 
-const universalTemplate = `You are connected to Nexus Pro MCP (http://127.0.0.1:8787).
+const universalTemplate = `You are connected to Nexus MCP OSS (http://127.0.0.1:8787).
+GitHub: https://github.com/brian-Lab-0/nexus-mcp-oss
 
-Session start:
-- Call nexus_register_agent to identify yourself
-- Call nexus_get_memory to restore any prior session context
+SESSION START:
+1. nexus_register_agent — register this instance (platform, instanceId, tags)
+2. nexus_get_memory     — restore prior session context if available
+3. nexus_context_budget — declare token budget: { action:"set", budget:80000 }
 
-During execution:
-- Call nexus_compress_prompt before expensive LLM calls to reduce token cost
-- Call nexus_send_activity with token metadata (tokensInput, tokensOutput, tokensSaved)
-- Call nexus_analyze_step periodically to detect drift and get corrections
+DURING EVERY TASK:
+- nexus_compress_prompt  — call before any prompt >200 tokens or with multiple sections
+- nexus_read_cached      — use for EVERY file read instead of raw reads
+- nexus_list_symbols     — understand file structure without reading full content
+- nexus_get_symbol       — extract single function/class (saves ~94% vs full read)
+- nexus_analyze_step     — call every 2-3 steps; apply correctionPatch if needsCorrection=true
+- nexus_send_activity    — emit started/running/completed/failed with sessionId+taskId in metadata
+- nexus_context_budget   — track usage: { action:"track", tokens:<n> }
 
-Session end:
-- Call nexus_distill_session to save a cold-start snapshot for next session
-- Call nexus_list_sessions to review total tokens saved and cost estimate`;
+SESSION END:
+- nexus_distill_session  — compress conversation to ~45-token cold-start snapshot
+- nexus_segment_episodes — segment activities into labelled episodes
+- nexus_session_handoff  — generate structured handoff for next session
+
+MONITORING (call anytime):
+- nexus_benchmark_summary  — total tokens saved, cost saved, per-ability latency
+- nexus_cache_stats         — file cache hit ratio
+- nexus_session_analysis    — full reconstruction of current session interactions`;
 
 // DOM refs
 const titleEl = document.getElementById("preset-title");
