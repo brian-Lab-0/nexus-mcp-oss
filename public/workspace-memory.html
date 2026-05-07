@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Pro — Workspace Memory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/workspace-memory.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+    <div class="bg-orb bg-orb-c"></div>
+
+    <nav class="topnav">
+      <a class="brand" href="/">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#ng4)" stroke-width="1.5" fill="rgba(77,240,255,0.06)"/>
+          <path d="M10 12L16 9L22 12V20L16 23L10 20V12Z" fill="url(#nf4)" opacity="0.9"/>
+          <defs>
+            <linearGradient id="ng4" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#4df0ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+            <linearGradient id="nf4" x1="10" y1="9" x2="22" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#4df0ff"/><stop offset="1" stop-color="#7c6fff"/></linearGradient>
+          </defs>
+        </svg>
+        <span class="brand-name">Nexus <span class="brand-pro">Pro</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Dashboard</a>
+        <a href="/pro-metrics" class="nav-link">Pro Metrics</a>
+        <a href="/workspace-memory" class="nav-link active">Memory</a>
+        <a href="/connection-helper" class="nav-link">Connect</a>
+        <a href="/agent-guide" class="nav-link">Agent Guide</a>
+        <a href="/nexus" class="nav-link nav-api" target="_blank">API ↗</a>
+      </div>
+      <div class="nav-right">
+        <span class="wm-badge">WM</span>
+      </div>
+    </nav>
+
+    <main class="layout">
+
+      <header class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Workspace Intelligence</p>
+          <h1>Workspace Memory</h1>
+          <p class="subtitle">File cache, symbol index, episode store, and context budget — the smart layer between agents and their workspace.</p>
+        </div>
+        <div class="hero-meta">
+          <div class="last-update">Last updated: <span id="last-updated">—</span></div>
+        </div>
+      </header>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-blue">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Cached Files</span>
+            <span class="kpi-value" id="kpi-entries">0</span>
+          </div>
+        </article>
+        <article class="kpi-card kpi-card-accent">
+          <div class="kpi-icon kpi-icon-cyan">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Cache Hit Ratio</span>
+            <span class="kpi-value kpi-value-accent" id="kpi-hit-ratio">0%</span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-green">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Hits / Misses</span>
+            <span class="kpi-value" id="kpi-hits-misses"><span style="color:var(--green)">0</span> / <span style="color:var(--red)">0</span></span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-purple">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Episodes</span>
+            <span class="kpi-value" id="kpi-episodes">0</span>
+          </div>
+        </article>
+        <article class="kpi-card kpi-card-gold">
+          <div class="kpi-icon kpi-icon-yellow">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Budget Used</span>
+            <span class="kpi-value kpi-value-gold" id="kpi-budget">0%</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="row-2">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">File Cache</h2>
+            <span class="badge badge-pill" id="cache-count">0 files</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Tokens</th>
+                  <th>Reads</th>
+                  <th>Symbols</th>
+                  <th>Turn</th>
+                </tr>
+              </thead>
+              <tbody id="cache-body"></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Cache Performance</h2>
+            <div class="trend-legend">
+              <span class="legend-item" style="--c:#34d399">Hits</span>
+              <span class="legend-item" style="--c:#f87171">Misses</span>
+            </div>
+          </div>
+          <div class="trend-wrap">
+            <canvas id="cache-canvas"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="row-2">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Episode Timeline</h2>
+            <span class="badge badge-pill" id="episode-count">0</span>
+          </div>
+          <ul id="episode-feed" class="feed"></ul>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Context Budget</h2>
+            <span class="badge badge-outline" id="budget-status">No session</span>
+          </div>
+          <div id="budget-content" class="budget-content">
+            <div class="gauge-wrap">
+              <canvas id="gauge-canvas" width="200" height="120"></canvas>
+              <div class="gauge-label" id="gauge-label">0%</div>
+            </div>
+            <div class="budget-stats" id="budget-stats"></div>
+            <div class="budget-rec" id="budget-rec"></div>
+          </div>
+        </article>
+      </section>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">Symbol Index</h2>
+          <span class="badge badge-outline" id="symbol-count">0 symbols</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>Symbol</th>
+                <th>Kind</th>
+                <th>Lines</th>
+                <th>Signature</th>
+              </tr>
+            </thead>
+            <tbody id="symbol-body"></tbody>
+          </table>
+        </div>
+      </article>
+
+    </main>
+
+    <script src="/assets/workspace-memory.js"></script>
+  </body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Pro — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/dashboard.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+    <div class="bg-orb bg-orb-c"></div>
+
+    <nav class="topnav">
+      <a class="brand" href="/">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#ng)" stroke-width="1.5" fill="rgba(77,240,255,0.06)"/>
+          <path d="M10 12L16 9L22 12V20L16 23L10 20V12Z" fill="url(#nf)" opacity="0.9"/>
+          <defs>
+            <linearGradient id="ng" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4df0ff"/>
+              <stop offset="1" stop-color="#a78bfa"/>
+            </linearGradient>
+            <linearGradient id="nf" x1="10" y1="9" x2="22" y2="23" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4df0ff"/>
+              <stop offset="1" stop-color="#7c6fff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="brand-name">Nexus <span class="brand-pro">Pro</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Dashboard</a>
+        <a href="/pro-metrics" class="nav-link">Pro Metrics</a>
+        <a href="/workspace-memory" class="nav-link">Memory</a>
+        <a href="/connection-helper" class="nav-link">Connect</a>
+        <a href="/agent-guide" class="nav-link">Agent Guide</a>
+        <a href="/nexus" class="nav-link nav-api" target="_blank">API ↗</a>
+      </div>
+      <div class="nav-right">
+        <div class="conn-chip" id="conn-chip">
+          <span class="conn-dot"></span>
+          <span id="conn-label">Connecting</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="layout">
+
+      <header class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Agent Observability</p>
+          <h1>Workspace Control Center</h1>
+          <p class="subtitle">Real-time monitoring for Claude Code, Codex, Ollama, VS Code agents, and custom tools.</p>
+        </div>
+        <div class="hero-meta">
+          <div class="last-update">Last updated: <span id="last-updated">—</span></div>
+        </div>
+      </header>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-blue">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v1h-3zM4.75 14.094A5.973 5.973 0 004 17v1H1v-1a3 3 0 013.75-2.906z"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Connected Agents</span>
+            <span class="kpi-value" id="total-agents">0</span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-purple">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Total Activities</span>
+            <span class="kpi-value" id="total-activities">0</span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-green">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Running Tasks</span>
+            <span class="kpi-value" id="running-count">0</span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-red">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Failed Tasks</span>
+            <span class="kpi-value" id="failed-count">0</span>
+          </div>
+        </article>
+        <article class="kpi-card kpi-card-accent">
+          <div class="kpi-icon kpi-icon-cyan">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Tokens Saved</span>
+            <span class="kpi-value kpi-value-accent" id="tokens-saved-kpi">0</span>
+          </div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-icon kpi-icon-green">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Cache Hit Ratio</span>
+            <span class="kpi-value" id="cache-hit-ratio" style="color:var(--green)">—</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="row-2">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">System Metrics</h2>
+            <div class="card-actions">
+              <select id="memory-unit" class="select-sm">
+                <option value="auto" selected>Auto</option>
+                <option value="mb">MB</option>
+                <option value="gb">GB</option>
+              </select>
+              <span class="badge badge-outline" id="metrics-state">Fetching…</span>
+            </div>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-tile">
+              <span class="metric-label">CPU Seconds</span>
+              <strong class="metric-value" id="metric-cpu">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span class="metric-label" id="metric-memory-label">Memory</span>
+              <strong class="metric-value" id="metric-memory">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span class="metric-label">Event Loop Lag</span>
+              <strong class="metric-value" id="metric-lag">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span class="metric-label">Uptime</span>
+              <strong class="metric-value" id="metric-uptime">0</strong>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Live Trend</h2>
+            <div class="trend-legend">
+              <span class="legend-item" style="--c:#4df0ff">CPU</span>
+              <span class="legend-item" style="--c:#a78bfa">MEM</span>
+              <span class="legend-item" style="--c:#fbbf24">LAG</span>
+              <span class="legend-item" style="--c:#34d399">UP</span>
+            </div>
+          </div>
+          <div class="trend-wrap">
+            <canvas id="trend-canvas"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="row-2">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Platform Distribution</h2>
+          </div>
+          <div id="platform-bars" class="bars"></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Task Status</h2>
+          </div>
+          <div id="status-bars" class="bars"></div>
+        </article>
+      </section>
+
+      <section class="row-2">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Active Agents</h2>
+            <span class="badge badge-pill" id="agents-count">0</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Platform</th>
+                  <th>Instance</th>
+                  <th>Last Seen</th>
+                </tr>
+              </thead>
+              <tbody id="agents-body"></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">Control Log</h2>
+            <span class="badge badge-pill" id="control-count">0</span>
+          </div>
+          <ul id="control-log" class="feed"></ul>
+        </article>
+      </section>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">Activity Feed</h2>
+          <span class="badge badge-pill" id="activity-count">0</span>
+        </div>
+        <ul id="activity-log" class="feed feed-wide"></ul>
+      </article>
+
+    </main>
+
+    <script src="/assets/dashboard.js"></script>
+  </body>
+</html>

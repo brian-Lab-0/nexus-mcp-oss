@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Pro — Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/connection-helper.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+
+    <nav class="topnav">
+      <a class="brand" href="/">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#ng3)" stroke-width="1.5" fill="rgba(77,240,255,0.06)"/>
+          <path d="M10 12L16 9L22 12V20L16 23L10 20V12Z" fill="url(#nf3)" opacity="0.9"/>
+          <defs>
+            <linearGradient id="ng3" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#4df0ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+            <linearGradient id="nf3" x1="10" y1="9" x2="22" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#4df0ff"/><stop offset="1" stop-color="#7c6fff"/></linearGradient>
+          </defs>
+        </svg>
+        <span class="brand-name">Nexus <span class="brand-pro">Pro</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Dashboard</a>
+        <a href="/pro-metrics" class="nav-link">Pro Metrics</a>
+        <a href="/workspace-memory" class="nav-link">Memory</a>
+        <a href="/connection-helper" class="nav-link active">Connect</a>
+        <a href="/agent-guide" class="nav-link">Agent Guide</a>
+        <a href="/nexus" class="nav-link nav-api" target="_blank">API ↗</a>
+      </div>
+    </nav>
+
+    <main class="layout">
+
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Integration Guide</p>
+          <h1>Connect Agents to Nexus</h1>
+          <p class="subtitle">Platform-specific setup commands and MCP configuration for Claude Code, Codex, Ollama, and custom clients.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">Platform Presets</h2>
+          <span class="badge badge-outline">Quick setup</span>
+        </div>
+        <div class="preset-tabs" id="preset-tabs">
+          <button class="preset-tab" data-target="claude-code">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            Claude Code
+          </button>
+          <button class="preset-tab" data-target="codex">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            Codex
+          </button>
+          <button class="preset-tab" data-target="local-ollama">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"/></svg>
+            Ollama Local
+          </button>
+          <button class="preset-tab" data-target="custom">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+            Custom MCP
+          </button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title" id="preset-title">Claude Code Setup</h2>
+          <button class="copy-btn" id="copy-commands" onclick="copyCode('preset-commands', this)">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/></svg>
+            Copy
+          </button>
+        </div>
+        <pre class="code-block" id="preset-commands"></pre>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">Universal Agent Prompt Template</h2>
+          <button class="copy-btn" id="copy-template" onclick="copyCode('universal-template', this)">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/></svg>
+            Copy
+          </button>
+        </div>
+        <p class="helper-text">Paste this into your agent's system prompt to enable automatic Nexus reporting.</p>
+        <pre class="code-block" id="universal-template"></pre>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">MCP Tools Reference</h2>
+          <span class="badge badge-pill">20 tools</span>
+        </div>
+        <div class="tools-grid">
+          <div class="tool-row tool-core">
+            <span class="tool-tag">Core</span>
+            <div class="tool-list">
+              <span class="tool-chip">nexus_overview</span>
+              <span class="tool-chip">nexus_register_agent</span>
+              <span class="tool-chip">nexus_send_activity</span>
+              <span class="tool-chip">nexus_list_activities</span>
+              <span class="tool-chip">nexus_list_sessions</span>
+              <span class="tool-chip">nexus_send_control</span>
+            </div>
+          </div>
+          <div class="tool-row tool-pro">
+            <span class="tool-tag tool-tag-pro">Pro</span>
+            <div class="tool-list">
+              <span class="tool-chip tool-chip-pro">nexus_compress_prompt</span>
+              <span class="tool-chip tool-chip-pro">nexus_distill_session</span>
+              <span class="tool-chip tool-chip-pro">nexus_get_memory</span>
+              <span class="tool-chip tool-chip-pro">nexus_analyze_step</span>
+            </div>
+          </div>
+          <div class="tool-row tool-pro">
+            <span class="tool-tag tool-tag-pro">Workspace Memory</span>
+            <div class="tool-list">
+              <span class="tool-chip tool-chip-pro">nexus_read_cached</span>
+              <span class="tool-chip tool-chip-pro">nexus_file_digest</span>
+              <span class="tool-chip tool-chip-pro">nexus_list_symbols</span>
+              <span class="tool-chip tool-chip-pro">nexus_get_symbol</span>
+              <span class="tool-chip tool-chip-pro">nexus_segment_episodes</span>
+              <span class="tool-chip tool-chip-pro">nexus_recall_episode</span>
+              <span class="tool-chip tool-chip-pro">nexus_context_budget</span>
+              <span class="tool-chip tool-chip-pro">nexus_session_handoff</span>
+              <span class="tool-chip tool-chip-pro">nexus_cache_stats</span>
+            </div>
+          </div>
+          <div class="tool-row tool-core">
+            <span class="tool-tag">Meta</span>
+            <div class="tool-list">
+              <span class="tool-chip">nexus_agent_guide</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <script src="/assets/connection-helper.js"></script>
+  </body>
+</html>

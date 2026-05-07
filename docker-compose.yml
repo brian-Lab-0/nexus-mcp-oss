@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  nexus-mcp-oss:
+    build: .
+    image: nexus-mcp-oss:latest
+    container_name: nexus-mcp-oss
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8787
+      LOG_LEVEL: info
