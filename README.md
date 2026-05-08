@@ -4,6 +4,7 @@
   <img src="public/favicon.svg" alt="OpenBnet Nexus" width="120" />
 </p>
 
+# now supports Openclaw intergration you can give your agent the repo and he will do the rest 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![MCP Compatible](https://img.shields.io/badge/MCP-compatible-blue.svg)](https://modelcontextprotocol.io)
 [![Made by OpenBnet](https://img.shields.io/badge/made%20by-OpenBnet-27CFBA.svg)](https://spaces.openbnet.com)
