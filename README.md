@@ -14,6 +14,12 @@ Open-source Nexus monitoring/control server for MCP-style code agents and tools.
 
 This project provides a centralized endpoint (`/nexus`) that tracks connected agent instances, activity status, and control actions while exposing Prometheus metrics and live WebSocket events.
 
+## Dashboard
+
+![Nexus dashboard — live agent + token savings view](res/screenshot-dashboard.png)
+
+![Nexus Pro Metrics — compression leaderboard](res/screenshot-pro-metrics.png)
+
 ## What it can do
 
 - Run continuously in the background as a local or hosted service
@@ -23,6 +29,142 @@ This project provides a centralized endpoint (`/nexus`) that tracks connected ag
 - Stream live status over WebSocket
 - Expose `/metrics` for Prometheus/Grafana
 - Integrate with Claude Code, Codex, local Ollama wrappers, VS Code agents, Antigravity, and custom tools
+
+## Use Cases
+
+### Claude Code — always-on token optimization (recommended)
+
+The fastest way to get Claude Code saving tokens on every session. Five steps, copy-paste ready.
+
+```bash
+# 1 — install Claude Code CLI (skip if already installed)
+npm install -g @anthropic-ai/claude-code
+
+# 2 — clone and start Nexus
+git clone https://github.com/brian-Lab-0/nexus-mcp-oss.git
+cd nexus-mcp-oss && npm install && cp .env.example .env && npm start
+# → Nexus running at http://127.0.0.1:8787
+
+# 3 — tell Claude Code where the MCP server is
+#    add to .claude/settings.json in your project (or ~/.claude/settings.json globally)
+```
+
+```json
+{
+  "mcpServers": {
+    "nexus": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/nexus-mcp-oss/dist/mcp-bridge.js"],
+      "env": {
+        "NEXUS_URL": "http://127.0.0.1:8787"
+      }
+    }
+  }
+}
+```
+
+```bash
+# 4 — drop the instruction file into your project so Claude always uses Nexus
+cp /path/to/nexus-mcp-oss/.claude.md /path/to/your-project/.claude.md
+
+# 5 — start Claude Code — it will register, compress, cache, and record automatically
+cd /path/to/your-project && claude
+```
+
+Once connected, Claude Code automatically:
+
+- Compresses long prompts before expensive LLM calls (35–94% token savings)
+- Reads files through the workspace memory cache (66%+ savings on repeated reads)
+- Extracts single functions/classes instead of reading whole files (94% savings)
+- Analyzes each step for drift and applies corrections
+- Distills the session at end for warm restart next time
+- Records every interaction to `data/sessions/<id>.jsonl` for offline analysis
+
+Measured aggregate savings across realistic workloads: **72.86% fewer tokens** sent to the LLM vs no Nexus.
+
+---
+
+### Tell your agent to always use Nexus (system prompt / CLAUDE.md)
+
+Drop this into your project's `CLAUDE.md` (or agent system prompt) to make Nexus usage automatic on every session, without relying on the agent remembering:
+
+```markdown
+## Agent setup — always required at session start
+
+You are connected to Nexus MCP (http://127.0.0.1:8787) via the `nexus` MCP server.
+
+At the START of every session:
+1. Call `nexus_register_agent` to register this instance.
+2. Call `nexus_get_memory` to restore prior session context.
+3. Call `nexus_context_budget` with `{ action: "set", budget: 80000 }`.
+
+DURING every task:
+- `nexus_compress_prompt` — before any prompt > 200 tokens.
+- `nexus_read_cached` — for EVERY file read instead of raw reads.
+- `nexus_get_symbol` — to extract a single function (saves ~94% vs full file read).
+- `nexus_analyze_step` — every 2–3 steps to catch drift early.
+- `nexus_send_activity` — signal started / running / completed / failed.
+
+At the END of every session:
+- `nexus_distill_session` — compress conversation to cold-start snapshot.
+- `nexus_session_handoff` — generate warm handoff for next session.
+```
+
+This pattern ensures Nexus is used even if the `.claude.md` file is not present — the instruction lives in the model's context from the start.
+
+---
+
+### Multi-agent fleet monitoring
+
+Register each agent at startup with a unique `id` and monitor all of them from a single dashboard at `http://127.0.0.1:8787`:
+
+```bash
+# Agent A (Claude Code on machine-1)
+curl -X POST http://127.0.0.1:8787/nexus/agents \
+  -H "Content-Type: application/json" \
+  -d '{"id":"cc-machine-1","name":"Claude Code — machine-1","platform":"claude-code","instanceId":"machine-1"}'
+
+# Agent B (Codex on CI)
+curl -X POST http://127.0.0.1:8787/nexus/agents \
+  -H "Content-Type: application/json" \
+  -d '{"id":"codex-ci","name":"Codex CI Worker","platform":"codex","instanceId":"gh-actions-runner"}'
+```
+
+All agents appear live on the dashboard with token savings, activity timeline, and cache stats.
+
+---
+
+### Local Ollama — token-cut before every LLM call
+
+Use Nexus as a compression middleware in front of any local model:
+
+```bash
+# Compress your system prompt before sending to Ollama
+COMPRESSED=$(curl -s -X POST http://127.0.0.1:8787/nexus/compress \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"YOUR LONG SYSTEM PROMPT...","task":"current task","aggressiveness":"medium"}' \
+  | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['compressedPrompt'])")
+
+# Send the compressed prompt to Ollama
+curl http://localhost:11434/api/generate \
+  -d "{\"model\":\"llama3\",\"prompt\":\"$COMPRESSED\"}"
+```
+
+---
+
+### Research / paper data collection
+
+Every ability call is recorded with full token metadata. Pull aggregate stats at any time:
+
+```bash
+# Summary: totals, per-ability latency, per-session rollups
+curl http://127.0.0.1:8787/nexus/benchmark/summary
+
+# Export full NDJSON for analysis pipelines
+curl http://127.0.0.1:8787/nexus/benchmark/export.jsonl > data/run-$(date +%Y%m%d).jsonl
+```
+
+See [CLAUDE_CODE_SETUP.md](CLAUDE_CODE_SETUP.md) for the full Claude Code install and connect guide.
 
 ## Project structure
 
